@@ -724,6 +724,9 @@ Untuk masalah, saran, atau pertanyaan:
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@ponspes.test | password |
+| Guru | guru@ponspes.test | password |
+| Santri | santri@ponspes.test | password |
+| Wali | wali@ponspes.test | password |
 
 ---
 
