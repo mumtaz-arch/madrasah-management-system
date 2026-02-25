@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "project": "PONSPES School Management System",
+    "date": "2026-01-15",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "PONSPES is an integrated School Management System designed specifically for Pondok Pesantren (Islamic Boarding Schools). It facilitates comprehensive academic, financial, administrative, and communication management, including specialized portals for students, teachers, and guardians, as well as AI-assisted lesson plan generation and online computerized testing.",
+  "core_goals": [
+    "Provide a centralized platform to manage all academic and administrative operations of the Pondok Pesantren.",
+    "Enable role-based access for Admin, Operator, Guru (Teacher), Santri (Student), and Wali (Guardian) with secure authentication and tailored functionality.",
+    "Streamline student data management, scheduling, grading, attendance, and computerized testing.",
+    "Support financial processes including billing, payments, and notifications.",
+    "Enhance communication through internal messaging and announcements.",
+    "Deliver accessible portals for students, teachers, and guardians to interact with relevant information and tasks.",
+    "Leverage AI technology to assist teachers in generating lesson plans (RPP).",
+    "Offer export/import features for data interoperability and reporting.",
+    "Ensure system security, performance, and auditability through activity logging and industry best practices."
+  ],
+  "key_features": [
+    "Robust Authentication and Authorization system with role-based access control implemented via Laravel Breeze.",
+    "Admin Dashboard with real-time analytics, statistics, and system overview charts.",
+    "Comprehensive Student (Santri) Management including CRUD operations, class assignments, and status tracking.",
+    "Teacher (Guru) Management supporting data CRUD, assignment, and integration with schedules and subjects.",
+    "Class (Kelas) and Subject (Mapel) Management with assignments and KKM settings.",
+    "Schedule (Jadwal) Management for class timetables, integrated with teacher and subject data.",
+    "Grade (Nilai) Management enabling input, editing, and visualization of student academic results.",
+    "Attendance tracking for both students and teachers, accessible on relevant portals.",
+    "Computer Based Testing (CBT) system with exam creation, question banks, and tracking attempts.",
+    "Online Admission System (PPDB) with student registration and document uploads.",
+    "Financial Management including billing (Tagihan), payment types, payments tracking, and automated notifications.",
+    "Announcements and Messaging System to facilitate communication within the school community.",
+    "Content Management System (CMS) for managing public-facing website content like banners, pages, and testimonials.",
+    "Dedicated portals for Wali (guardians), Santri (students), and Guru (teachers) featuring dashboards and role-specific functionality.",
+    "AI-powered RPP (lesson plan) Generator to assist teachers with curriculum planning.",
+    "Data export/import capabilities supporting Excel and PDF formats.",
+    "Activity Logs capturing detailed user actions for audit and security purposes.",
+    "Site-wide settings configuration panel to manage institutional information and preferences.",
+    "Public landing page for school promotion and access to admission.",
+    "PWA support with asset caching and offline capabilities."
+  ],
+  "user_flow_summary": [
+    "Users authenticate on the system and are routed to respective dashboards based on role: Admin, Operator, Guru, Wali, or Santri.",
+    "Admins manage master data entities like students, teachers, classes, subjects, schedules, grades, attendance, financials, CBT exams, and system settings via comprehensive dashboards and forms.",
+    "Teachers (Guru) access their schedules, input student grades, manage classes, and generate lesson plans using the AI tool.",
+    "Students (Santri) view their academic information, take online CBT exams, and access schedules.",
+    "Guardians (Wali) monitor their child's progress, attendance records, billing status, and communicate with teachers via messaging.",
+    "Operators assist the admin with data management tasks but with limited system access.",
+    "All users receive announcements, and relevant notifications, and can communicate internally through messaging.",
+    "The system supports export of student data, grades, and reports in Excel/PDF formats and imports where applicable.",
+    "Audit logs track all significant user activities for transparency and security."
+  ],
+  "validation_criteria": [
+    "All user roles must authenticate securely using Laravel Breeze with session management and role middleware enforced.",
+    "Role-based access control must restrict or grant access to specific routes, views, and API endpoints appropriately.",
+    "Admin dashboards should correctly display realtime analytics and statistical data from the system.",
+    "CRUD operations for student, teacher, class, subject, schedule, grade, attendance, billing, and exam entities must function accurately with validation.",
+    "CBT exams must allow creation, scheduling, question bank management, and record student attempts with scoring.",
+    "Wali and Santri portals must display accurate, up-to-date academic and attendance data relevant to their children or themselves.",
+    "Financial modules must correctly generate bills, track payment statuses, and send email notifications reliably.",
+    "AI RPP generator must produce lesson plans based on configured input parameters without errors.",
+    "Exported files in Excel and PDF formats should conform to expected data structures and be downloadable without corruption.",
+    "Activity logs must capture CRUD operations, login/logout events, and sensitive actions with user identification and timestamps.",
+    "System security must prevent unauthorized data access, SQL injection, CSRF, and XSS vulnerabilities.",
+    "The system shall be performant with caching mechanisms enabled, pagination for large data sets, and optimized database queries.",
+    "PWA features including offline availability and asset caching must function as intended on supported browsers.",
+    "Public landing page and PPDB online forms must be accessible and submit data correctly."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "PHP 8.2",
+      "Laravel 12",
+      "Livewire 3",
+      "MySQL",
+      "Tailwind CSS",
+      "Vite",
+      "Laravel Breeze",
+      "DomPDF",
+      "Maatwebsite Excel"
+    ],
+    "features": [
+      {
+        "name": "Authentication & Authorization",
+        "description": "User authentication with multiple roles (Admin, Operator, Guru, Santri, Wali) using Laravel Breeze. Role-based access control for different portals.",
+        "files": [
+          "app/Models/User.php",
+          "routes/auth.php",
+          "resources/views/auth/login.blade.php"
+        ]
+      },
+      {
+        "name": "Admin Dashboard",
+        "description": "Analytics dashboard with statistics, charts, and system overview for administrators.",
+        "files": [
+          "app/Livewire/Admin/AnalyticsDashboard.php",
+          "resources/views/livewire/admin/analytics-dashboard.blade.php"
+        ]
+      },
+      {
+        "name": "Santri Management",
+        "description": "CRUD operations for managing student (santri) data including personal information, class assignment, and status.",
+        "files": [
+          "app/Models/Santri.php",
+          "app/Livewire/Admin/Santri/SantriIndex.php",
+          "app/Livewire/Admin/Santri/SantriForm.php"
+        ]
+      },
+      {
+        "name": "Teacher (Guru) Management",
+        "description": "Manage teacher data, assignments, and related information.",
+        "files": [
+          "app/Models/Guru.php",
+          "app/Livewire/Admin/Guru/GuruIndex.php",
+          "app/Livewire/Admin/Guru/GuruForm.php"
+        ]
+      },
+      {
+        "name": "Class (Kelas) Management",
+        "description": "Manage classes including class names, levels, and student assignments.",
+        "files": [
+          "app/Models/Kelas.php",
+          "app/Livewire/Admin/Kelas/KelasIndex.php",
+          "app/Livewire/Admin/Kelas/KelasForm.php"
+        ]
+      },
+      {
+        "name": "Subject (Mapel) Management",
+        "description": "Manage academic subjects and curriculum.",
+        "files": [
+          "app/Models/Mapel.php",
+          "app/Livewire/Admin/Mapel/MapelIndex.php",
+          "app/Livewire/Admin/Mapel/MapelForm.php"
+        ]
+      },
+      {
+        "name": "Schedule (Jadwal) Management",
+        "description": "Manage class schedules, timetables, and scheduling.",
+        "files": [
+          "app/Models/Jadwal.php",
+          "app/Livewire/Admin/Jadwal/JadwalIndex.php",
+          "app/Livewire/Admin/Jadwal/JadwalForm.php"
+        ]
+      },
+      {
+        "name": "Grades (Nilai) Management",
+        "description": "Input, manage, and view student grades with different scoring categories.",
+        "files": [
+          "app/Models/Nilai.php",
+          "app/Livewire/Admin/Nilai/NilaiIndex.php",
+          "app/Livewire/Admin/Nilai/NilaiForm.php",
+          "app/Livewire/Admin/Nilai/NilaiInput.php"
+        ]
+      },
+      {
+        "name": "Attendance Management",
+        "description": "Track and manage attendance for both students and teachers.",
+        "files": [
+          "app/Models/Attendance.php",
+          "app/Models/GuruAttendance.php",
+          "app/Livewire/Admin/Attendance/AttendanceIndex.php"
+        ]
+      },
+      {
+        "name": "CBT (Computer Based Testing)",
+        "description": "Online examination system with exam creation, question banks, and student attempt tracking.",
+        "files": [
+          "app/Models/Exam.php",
+          "app/Models/ExamAttempt.php",
+          "app/Models/ExamAnswer.php",
+          "app/Models/QuestionBank.php",
+          "app/Livewire/Admin/Cbt/ExamIndex.php",
+          "app/Livewire/Admin/Cbt/QuestionBankIndex.php"
+        ]
+      },
+      {
+        "name": "PPDB (Online Admission)",
+        "description": "Online student registration and admission system with document upload.",
+        "files": [
+          "app/Models/PpdbRegistration.php",
+          "app/Models/PpdbDocument.php",
+          "app/Livewire/Admin/Ppdb/PpdbIndex.php",
+          "app/Livewire/Ppdb/PpdbForm.php"
+        ]
+      },
+      {
+        "name": "Finance Management",
+        "description": "Payment tracking, billing (tagihan), and payment types management.",
+        "files": [
+          "app/Models/Payment.php",
+          "app/Models/PaymentType.php",
+          "app/Models/Tagihan.php",
+          "app/Livewire/Admin/Finance/PaymentIndex.php"
+        ]
+      },
+      {
+        "name": "Announcements",
+        "description": "Create and manage announcements for different user groups.",
+        "files": [
+          "app/Models/Announcement.php",
+          "app/Livewire/Admin/Announcements/AnnouncementIndex.php"
+        ]
+      },
+      {
+        "name": "Messaging System",
+        "description": "Internal messaging system for communication between users.",
+        "files": [
+          "app/Models/Message.php",
+          "app/Mail/TestEmail.php"
+        ]
+      },
+      {
+        "name": "CMS (Content Management)",
+        "description": "Manage website content including banners, pages, testimonials, and landing page content.",
+        "files": [
+          "app/Models/Banner.php",
+          "app/Models/Page.php",
+          "app/Models/Testimonial.php",
+          "app/Models/LandingPageContent.php",
+          "app/Livewire/Admin/Cms/PagesIndex.php",
+          "app/Livewire/Admin/Cms/BannersIndex.php"
+        ]
+      },
+      {
+        "name": "Wali (Guardian) Portal",
+        "description": "Parent/guardian portal to view child's academic progress, attendance, and payments.",
+        "files": [
+          "app/Models/Wali.php",
+          "app/Livewire/Wali/WaliDashboard.php",
+          "resources/views/wali/dashboard.blade.php"
+        ]
+      },
+      {
+        "name": "Santri Portal",
+        "description": "Student portal for viewing grades, schedules, and taking exams.",
+        "files": [
+          "app/Livewire/Santri/SantriDashboard.php",
+          "resources/views/santri/dashboard.blade.php"
+        ]
+      },
+      {
+        "name": "Guru Portal",
+        "description": "Teacher portal for managing classes, inputting grades, and viewing schedules.",
+        "files": [
+          "app/Livewire/Guru/GuruDashboard.php",
+          "resources/views/guru/dashboard.blade.php"
+        ]
+      },
+      {
+        "name": "AI RPP Generator",
+        "description": "AI-powered lesson plan (RPP) generator for teachers.",
+        "files": [
+          "app/Livewire/Admin/Ai/RppGenerator.php",
+          "resources/views/livewire/admin/ai/rpp-generator.blade.php"
+        ]
+      },
+      {
+        "name": "Export/Import",
+        "description": "Data export to Excel/PDF and import functionality.",
+        "files": [
+          "app/Livewire/Admin/ExportData.php",
+          "app/Exports/SantriExport.php",
+          "app/Imports/SantriImport.php"
+        ]
+      },
+      {
+        "name": "Activity Logs",
+        "description": "Track user activities in the system for audit purposes.",
+        "files": [
+          "app/Models/ActivityLog.php",
+          "app/Livewire/Admin/ActivityLogs.php"
+        ]
+      },
+      {
+        "name": "Site Settings",
+        "description": "Configure system-wide settings including school information.",
+        "files": [
+          "app/Models/SiteSetting.php",
+          "app/Livewire/Admin/Settings/SiteSettings.php"
+        ]
+      },
+      {
+        "name": "Landing Page",
+        "description": "Public-facing landing page for the school website.",
+        "files": [
+          "resources/views/landing/index.blade.php",
+          "app/Livewire/Frontend/LandingPage.php"
+        ]
+      }
+    ]
+  }
+}

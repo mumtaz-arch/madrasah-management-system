@@ -1,0 +1,42 @@
+﻿
+  Migration name  Batch / Status  
+  0001_01_01_000000_create_users_table  [1] Ran  
+  0001_01_01_000001_create_cache_table  [1] Ran  
+  0001_01_01_000002_create_jobs_table  [1] Ran  
+  2025_12_27_053016_create_gurus_table  [1] Ran  
+  2025_12_27_053018_create_walis_table  [1] Ran  
+  2025_12_27_053020_create_kelas_table  [1] Ran  
+  2025_12_27_053021_create_mapels_table  [1] Ran  
+  2025_12_27_053025_create_santris_table  [1] Ran  
+  2025_12_27_053033_create_jadwals_table  [1] Ran  
+  2025_12_27_053035_create_nilais_table  [1] Ran  
+  2025_12_27_053036_create_site_settings_table  [1] Ran  
+  2025_12_27_053038_create_banners_table  [1] Ran  
+  2025_12_27_053040_create_pages_table  [1] Ran  
+  2025_12_27_053052_create_announcements_table  [1] Ran  
+  2025_12_27_053053_create_ppdb_registrations_table  [1] Ran  
+  2025_12_27_053055_create_ppdb_documents_table  [1] Ran  
+  2025_12_27_053057_add_role_to_users_table  [1] Ran  
+  2025_12_27_124533_create_attendances_table  [2] Ran  
+  2025_12_27_124535_create_guru_attendances_table  [2] Ran  
+  2025_12_27_125504_create_question_banks_table  [3] Ran  
+  2025_12_27_125507_create_exams_table  [3] Ran  
+  2025_12_27_125509_create_exam_questions_table  [3] Ran  
+  2025_12_27_125512_create_exam_attempts_table  [3] Ran  
+  2025_12_27_125514_create_exam_answers_table  [3] Ran  
+  2025_12_27_130606_create_payment_types_table  [4] Ran  
+  2025_12_27_130609_create_tagihans_table  [4] Ran  
+  2025_12_27_130613_create_payments_table  [4] Ran  
+  2025_12_27_135607_create_testimonials_table  [5] Ran  
+  2025_12_27_135610_create_achievements_table  [5] Ran  
+  2025_12_27_163504_create_pages_table  Pending  
+  2026_01_09_143800_add_documents_to_ppdb_registrations  [6] Ran  
+  2026_01_09_160338_add_payment_details_to_tagihans  Pending  
+  2026_01_10_000001_create_landing_page_cms_tables  Pending  
+  2026_01_17_155331_create_messages_table  [7] Ran  
+  2026_01_17_160609_create_activity_logs_table  [8] Ran  
+  2026_02_13_054915_create_teacher_journals_table  [9] Ran  
+  2026_02_14_000000_optimize_database_indexes  [10] Ran  
+  2026_02_14_000001_create_personal_access_tokens_table  [11] Ran  
+  2026_02_17_094146_adds_jadwal_id_to_teacher_journals_table  Pending  
+

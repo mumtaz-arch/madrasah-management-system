@@ -1,0 +1,838 @@
+[
+  {
+    "id": "TC001",
+    "title": "Admin Login Success",
+    "description": "Verify that an admin user can successfully log in with valid credentials.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid admin username and password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the admin dashboard is displayed with correct user role access."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Role-based Access Control Enforcement",
+    "description": "Ensure that users cannot access unauthorized pages or features based on their assigned role.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a teacher (Guru)."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access the Admin dashboard URL directly."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is denied or redirected appropriately."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access financial management pages."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify teacher user cannot access financial modules."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Student Management CRUD",
+    "description": "Verify Admin can create, read, update, and delete student (Santri) records with proper validations.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and navigate to the Santri management page."
+      },
+      {
+        "type": "action",
+        "description": "Create a new student with valid data."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm student appears in the list with correct details."
+      },
+      {
+        "type": "action",
+        "description": "Edit the student's details and save."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated details are reflected."
+      },
+      {
+        "type": "action",
+        "description": "Delete the student record."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm student is removed from the list."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to create a student with missing required fields."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation errors are displayed."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Teacher Management CRUD",
+    "description": "Verify Admin can manage teacher (Guru) data including creation, update, and deletion with validations.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and navigate to the Guru management page."
+      },
+      {
+        "type": "action",
+        "description": "Add a new teacher with valid data."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the teacher appears with correct details."
+      },
+      {
+        "type": "action",
+        "description": "Modify the teacher’s information and save."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated information is saved correctly."
+      },
+      {
+        "type": "action",
+        "description": "Delete the teacher record."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure the teacher does not appear in the list any longer."
+      },
+      {
+        "type": "action",
+        "description": "Try adding a teacher with invalid or duplicate data."
+      },
+      {
+        "type": "assertion",
+        "description": "Check for appropriate validation messages."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Class and Subject Management",
+    "description": "Validate creation, update, and deletion of classes (Kelas) and subjects (Mapel) with correct assignments.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and open Classes management."
+      },
+      {
+        "type": "action",
+        "description": "Create a new class with name and level."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the new class is listed with correct details."
+      },
+      {
+        "type": "action",
+        "description": "Edit the class details and save changes."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify updated class information."
+      },
+      {
+        "type": "action",
+        "description": "Create a subject and assign it to a class."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the subject appears linked to the correct class."
+      },
+      {
+        "type": "action",
+        "description": "Delete a subject and a class."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure they are removed from listings correctly."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Schedule Management Functionality",
+    "description": "Verify CRUD operations for class schedules integrating teacher and subject data.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and navigate to Schedule management."
+      },
+      {
+        "type": "action",
+        "description": "Create a new schedule entry with class, subject, teacher, and time."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure the schedule is correctly saved and displayed."
+      },
+      {
+        "type": "action",
+        "description": "Update the schedule timings or associated data."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that changes reflect properly."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to create conflicting schedule entries."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify system alerts or prevents schedule conflicts."
+      },
+      {
+        "type": "action",
+        "description": "Delete a schedule entry."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the schedule is removed."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Grade Management and Visualization",
+    "description": "Test input, editing, and viewing student grades across categories, including boundary values and invalid inputs.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin or Teacher and access Grades management."
+      },
+      {
+        "type": "action",
+        "description": "Input valid grade values for a student."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm grades are stored and visualized correctly."
+      },
+      {
+        "type": "action",
+        "description": "Edit existing grades."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify updates are saved and displayed accurately."
+      },
+      {
+        "type": "action",
+        "description": "Try entering grades beyond allowed range (e.g., negative or > maximum score)."
+      },
+      {
+        "type": "assertion",
+        "description": "Check validation and error messages."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Attendance Tracking Accuracy",
+    "description": "Validate attendance marking, updates and report visibility for students and teachers.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access attendance module as Admin."
+      },
+      {
+        "type": "action",
+        "description": "Mark student attendance for a given date."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm attendance is recorded correctly."
+      },
+      {
+        "type": "action",
+        "description": "Edit attendance status and save."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure the update is reflected in reports."
+      },
+      {
+        "type": "action",
+        "description": "Attempt invalid input such as marking attendance for a future date."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify input is rejected with proper error handling."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "CBT Exam Creation and Student Attempt Tracking",
+    "description": "Ensure Admin can create exams, add questions, and system properly records student attempts and scoring.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and create a new CBT exam with metadata."
+      },
+      {
+        "type": "action",
+        "description": "Add questions to the exam question bank."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify questions are associated with the exam."
+      },
+      {
+        "type": "action",
+        "description": "Login as a student (Santri) and take the exam."
+      },
+      {
+        "type": "action",
+        "description": "Submit the exam and ensure attempt is recorded."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the student's score is calculated and stored accurately."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to retake the exam if limited attempts are enforced."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify system prevents or allows retake as per configuration."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "PPDB Online Admission Form Submission",
+    "description": "Validate the new student registration form submissions and data handling including mandatory fields and document uploads.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access the PPDB registration form as a prospective student."
+      },
+      {
+        "type": "action",
+        "description": "Fill in all mandatory student data fields with valid inputs."
+      },
+      {
+        "type": "action",
+        "description": "Upload required document files (simulate without actual file upload test)."
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify registration is accepted and data saved."
+      },
+      {
+        "type": "action",
+        "description": "Submit form with missing required data."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm validation errors are presented."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Financial Billing and Payment Tracking",
+    "description": "Test creation of bills, payment entries, status updates, and notification triggers.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin or Operator and create new billing records."
+      },
+      {
+        "type": "action",
+        "description": "Assign billing records to students or guardians."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify bills reflect correct amounts and statuses."
+      },
+      {
+        "type": "action",
+        "description": "Record payment against a bill."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm payment updates billing status."
+      },
+      {
+        "type": "action",
+        "description": "Trigger payment notification emails."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify notifications are sent correctly."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Announcements Creation and Visibility",
+    "description": "Check that Announcements can be created, targeted to user groups, and visible in respective portals.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create an announcement targeting Students and Guardians."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the announcement appears in Santri and Wali portals."
+      },
+      {
+        "type": "action",
+        "description": "Create an announcement with invalid or missing target groups."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error messages."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Internal Messaging System",
+    "description": "Validate sending, receiving, and viewing messages between users within the system.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a teacher and send a message to a student."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the message appears in recipient's inbox."
+      },
+      {
+        "type": "action",
+        "description": "Reply to the message as the student."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the reply appears in the teacher's inbox."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to send a message without content."
+      },
+      {
+        "type": "assertion",
+        "description": "Check for validation errors preventing empty messages."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "CMS Content Management",
+    "description": "Test creation, editing, and deletion of banners, pages, and testimonials for the public website.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and create a new banner with an image and link."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify banner appears on the landing page."
+      },
+      {
+        "type": "action",
+        "description": "Add a new content page and save."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm page is accessible publicly with correct content."
+      },
+      {
+        "type": "action",
+        "description": "Create a testimonial and verify display."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure testimonial appears on appropriate public pages."
+      },
+      {
+        "type": "action",
+        "description": "Edit and delete CMS content items."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify updates and deletions are reflected."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Guardian (Wali) Portal Data Accuracy",
+    "description": "Ensure guardians can view accurate academic progress, attendance, billing, and messaging related to their wards.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a Wali user."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to child's academic grades, attendance reports, and billing statements."
+      },
+      {
+        "type": "action",
+        "description": "Send a message to a teacher via the Wali portal."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm message is sent and viewable in messaging system."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Student (Santri) Portal Functionalities",
+    "description": "Verify students can view grades, schedules, and take online CBT exams correctly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Santri."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm schedule display is correct and up to date."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify grades are displayed correctly."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to take an active CBT exam and submit answers."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure exam attempt is recorded with correct timing and scoring."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Teacher (Guru) Portal Features",
+    "description": "Test teacher portal access for managing classes, inputting grades, schedules, and using AI RPP generator.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Guru."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to schedule and class management views."
+      },
+      {
+        "type": "action",
+        "description": "Input and save student grades through the portal."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm grades are saved and visible immediately."
+      },
+      {
+        "type": "action",
+        "description": "Use the AI RPP Generator to generate a lesson plan with valid inputs."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the lesson plan is generated without errors."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Export and Import Data Functionality",
+    "description": "Validate the system can export and import data accurately in Excel and PDF formats without corruption.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and export student data to Excel."
+      },
+      {
+        "type": "assertion",
+        "description": "Download file is intact and data matches current database."
+      },
+      {
+        "type": "action",
+        "description": "Export grades report to PDF."
+      },
+      {
+        "type": "assertion",
+        "description": "PDF file opens with correct formatted data."
+      },
+      {
+        "type": "action",
+        "description": "Import a valid Excel file of student data."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify imported data is accurately reflected in the system."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to import invalid or corrupted Excel file."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that system detects errors and reports them gracefully."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Activity Logs Audit",
+    "description": "Check that all critical user actions such as login, CRUD operations, and sensitive changes are logged with correct user and timestamps.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Perform various system actions including login, create, update, and delete entities as admin."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify activity log entries capture action type, user ID, timestamp, and entity affected."
+      },
+      {
+        "type": "action",
+        "description": "Attempt a failed login."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the failed attempt is logged."
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Security: Prevention of Unauthorized Data Access",
+    "description": "Test that the system effectively prevents unauthorized data access, SQL injection, CSRF, and XSS attacks.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt SQL injection in form inputs and URL parameters."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the system neutralizes injection attempts without data compromise."
+      },
+      {
+        "type": "action",
+        "description": "Perform cross-site scripting (XSS) attacks in input fields."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm inputs are sanitized and no scripts execute."
+      },
+      {
+        "type": "action",
+        "description": "Try CSRF attack by submitting forms without valid tokens."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the request is rejected."
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Performance and Pagination",
+    "description": "Validate data loading performance with large datasets and proper pagination in listings.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Populate the student and teacher databases with a large number of records."
+      },
+      {
+        "type": "action",
+        "description": "Access listings for Santri and Guru management pages."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the page loads quickly and pagination controls function correctly."
+      },
+      {
+        "type": "action",
+        "description": "Scroll through pages to different data sets."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure data for each page loads properly and UI remains responsive."
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "PWA Offline Availability and Asset Caching",
+    "description": "Test the Progressive Web App functions including offline access and asset caching on supported browsers.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the application and confirm online asset caching is triggered."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that core assets are cached as intended."
+      },
+      {
+        "type": "action",
+        "description": "Simulate offline mode in a supported browser."
+      },
+      {
+        "type": "action",
+        "description": "Access cached pages such as dashboard and schedules."
+      },
+      {
+        "type": "assertion",
+        "description": "Check pages load properly without internet connection."
+      },
+      {
+        "type": "action",
+        "description": "Perform navigation between cached pages offline."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure smooth navigation and no failure errors."
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Public Landing Page and PPDB Form Accessibility",
+    "description": "Verify the public school landing page loads correctly and PPDB admission forms are accessible and submit data properly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access the public landing page as a non-logged-in user."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm correct loading of page content including banners and testimonials."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the PPDB registration form from the landing page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify form loads and all fields are visible."
+      },
+      {
+        "type": "action",
+        "description": "Submit a valid admission registration."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm successful form submission and response message."
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Site-wide Settings Configuration",
+    "description": "Test admin ability to update institutional information and preferences and confirm settings persist correctly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as Admin and access Site Settings panel."
+      },
+      {
+        "type": "action",
+        "description": "Update fields such as school name, contact information, and preferences."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify changes save correctly and persist after logout and login."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to enter invalid data or leave required fields blank."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm validation errors appear and prevent save."
+      }
+    ]
+  }
+]

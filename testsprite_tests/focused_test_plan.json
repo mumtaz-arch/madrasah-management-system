@@ -1,0 +1,1032 @@
+[
+    {
+        "id": "CORE-001",
+        "title": "Authentication - Invalid Credentials",
+        "description": "Verify login fails gracefully with wrong password",
+        "category": "core-authentication",
+        "priority": "Critical",
+        "type": "failure-scenario",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Navigate to /login"
+            },
+            {
+                "type": "action",
+                "description": "Enter valid email: admin@ponspes.test"
+            },
+            {
+                "type": "action",
+                "description": "Enter wrong password: wrongpassword123"
+            },
+            {
+                "type": "action",
+                "description": "Click login button"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify error message is displayed"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify user remains on login page"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no session is created"
+            }
+        ]
+    },
+    {
+        "id": "CORE-002",
+        "title": "Authentication - Empty Fields Validation",
+        "description": "Verify login form validates empty fields",
+        "category": "core-authentication",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Navigate to /login"
+            },
+            {
+                "type": "action",
+                "description": "Leave email field empty"
+            },
+            {
+                "type": "action",
+                "description": "Leave password field empty"
+            },
+            {
+                "type": "action",
+                "description": "Click login button"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for email field"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for password field"
+            }
+        ]
+    },
+    {
+        "id": "CORE-003",
+        "title": "Role-Based Access - Santri Accessing Admin Routes",
+        "description": "Verify Santri cannot access admin dashboard",
+        "category": "core-authorization",
+        "priority": "Critical",
+        "type": "failure-scenario",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Santri user"
+            },
+            {
+                "type": "action",
+                "description": "Directly navigate to /admin/dashboard"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify redirect to santri dashboard or 403"
+            },
+            {
+                "type": "action",
+                "description": "Directly navigate to /admin/santri"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify access denied"
+            },
+            {
+                "type": "action",
+                "description": "Directly navigate to /admin/finance/tagihan"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify access denied"
+            }
+        ]
+    },
+    {
+        "id": "CORE-004",
+        "title": "Santri CRUD - Create with Missing Required Fields",
+        "description": "Verify santri creation validates all required fields",
+        "category": "core-santri-management",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/santri"
+            },
+            {
+                "type": "action",
+                "description": "Click 'Tambah Santri' button"
+            },
+            {
+                "type": "action",
+                "description": "Leave nama_lengkap empty"
+            },
+            {
+                "type": "action",
+                "description": "Leave NIS empty"
+            },
+            {
+                "type": "action",
+                "description": "Click save"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for nama_lengkap"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for NIS"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no record is created"
+            }
+        ]
+    },
+    {
+        "id": "CORE-005",
+        "title": "Santri CRUD - Duplicate NIS Prevention",
+        "description": "Verify system prevents duplicate NIS creation",
+        "category": "core-santri-management",
+        "priority": "Critical",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/santri"
+            },
+            {
+                "type": "action",
+                "description": "Create santri with NIS '12345'"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify success message"
+            },
+            {
+                "type": "action",
+                "description": "Try creating another santri with same NIS '12345'"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify unique constraint error"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify duplicate is not created"
+            }
+        ]
+    },
+    {
+        "id": "CORE-006",
+        "title": "Santri Search - Special Characters Handling",
+        "description": "Verify search handles special characters safely",
+        "category": "core-santri-management",
+        "priority": "Medium",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/santri"
+            },
+            {
+                "type": "action",
+                "description": "Enter in search: <script>alert('xss')</script>"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no XSS execution"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify search returns no results gracefully"
+            },
+            {
+                "type": "action",
+                "description": "Enter in search: '; DROP TABLE santris; --"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no SQL injection"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify database integrity maintained"
+            }
+        ]
+    },
+    {
+        "id": "CORE-007",
+        "title": "Santri Delete - Cascade User Account",
+        "description": "Verify deleting santri also deletes associated user account",
+        "category": "core-santri-management",
+        "priority": "High",
+        "type": "core-functionality",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Create a santri with linked user account"
+            },
+            {
+                "type": "action",
+                "description": "Note the user_id of the santri"
+            },
+            {
+                "type": "action",
+                "description": "Delete the santri"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify santri is removed from list"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify associated user account is also deleted"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify old user cannot login anymore"
+            }
+        ]
+    },
+    {
+        "id": "CBT-001",
+        "title": "CBT Exam - Create with Invalid Date Range",
+        "description": "Verify exam cannot have end date before start date",
+        "category": "core-cbt",
+        "priority": "Critical",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/cbt/exams"
+            },
+            {
+                "type": "action",
+                "description": "Click 'Tambah Ujian'"
+            },
+            {
+                "type": "action",
+                "description": "Set tanggal_mulai to 2026-01-20"
+            },
+            {
+                "type": "action",
+                "description": "Set tanggal_selesai to 2026-01-15 (before start)"
+            },
+            {
+                "type": "action",
+                "description": "Fill other required fields"
+            },
+            {
+                "type": "action",
+                "description": "Click save"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error: end date must be after start"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify exam is not created"
+            }
+        ]
+    },
+    {
+        "id": "CBT-002",
+        "title": "CBT Exam - Duration Edge Cases",
+        "description": "Verify exam duration validation (minimum and boundaries)",
+        "category": "core-cbt",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/cbt/exams"
+            },
+            {
+                "type": "action",
+                "description": "Create exam with durasi = 0"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error: duration must be at least 1"
+            },
+            {
+                "type": "action",
+                "description": "Create exam with durasi = -5"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for negative duration"
+            },
+            {
+                "type": "action",
+                "description": "Create exam with durasi = 1"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify exam is created (minimum valid)"
+            }
+        ]
+    },
+    {
+        "id": "CBT-003",
+        "title": "CBT Exam Taking - Auto-Submit on Time Expiry",
+        "description": "Verify exam auto-submits when time runs out",
+        "category": "core-cbt",
+        "priority": "Critical",
+        "type": "core-functionality",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Create exam with 1 minute duration and active status"
+            },
+            {
+                "type": "action",
+                "description": "Login as Santri"
+            },
+            {
+                "type": "action",
+                "description": "Start the exam"
+            },
+            {
+                "type": "action",
+                "description": "Answer some questions but don't submit"
+            },
+            {
+                "type": "action",
+                "description": "Wait for timer to reach 0"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify exam auto-submits"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify attempt status is 'submitted'"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify score is calculated correctly"
+            }
+        ]
+    },
+    {
+        "id": "CBT-004",
+        "title": "CBT Exam - Prevent Multiple Attempts",
+        "description": "Verify santri cannot retake already submitted exam",
+        "category": "core-cbt",
+        "priority": "Critical",
+        "type": "failure-scenario",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Santri"
+            },
+            {
+                "type": "action",
+                "description": "Take and submit an exam"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify success message with score"
+            },
+            {
+                "type": "action",
+                "description": "Navigate back to exam list"
+            },
+            {
+                "type": "action",
+                "description": "Try to access the same exam again"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify exam shows as 'finished'"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify cannot start new attempt"
+            }
+        ]
+    },
+    {
+        "id": "CBT-005",
+        "title": "CBT Exam - No Questions Available",
+        "description": "Verify graceful handling when exam has no questions",
+        "category": "core-cbt",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Create exam with no questions"
+            },
+            {
+                "type": "action",
+                "description": "Set status to 'active'"
+            },
+            {
+                "type": "action",
+                "description": "Login as Santri"
+            },
+            {
+                "type": "action",
+                "description": "Try to take the exam"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify appropriate message about no questions"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no error/crash occurs"
+            }
+        ]
+    },
+    {
+        "id": "FINANCE-001",
+        "title": "Tagihan - Generate for No Active Santri",
+        "description": "Verify handling when generating tagihan for empty class",
+        "category": "core-finance",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/finance/tagihan"
+            },
+            {
+                "type": "action",
+                "description": "Click 'Generate Tagihan'"
+            },
+            {
+                "type": "action",
+                "description": "Select a class with no active santri"
+            },
+            {
+                "type": "action",
+                "description": "Click generate"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify message: 'Tidak ada santri aktif yang ditemukan'"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no tagihan records created"
+            }
+        ]
+    },
+    {
+        "id": "FINANCE-002",
+        "title": "Tagihan - Duplicate Prevention",
+        "description": "Verify same tagihan cannot be generated twice for same month/year/type",
+        "category": "core-finance",
+        "priority": "Critical",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Generate tagihan for January 2026, SPP type"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify success message with count"
+            },
+            {
+                "type": "action",
+                "description": "Generate same tagihan again (January 2026, SPP)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify message indicates skipped duplicates"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no duplicate records in database"
+            }
+        ]
+    },
+    {
+        "id": "FINANCE-003",
+        "title": "Payment - Process with Invalid Amount",
+        "description": "Verify payment validation for amount field",
+        "category": "core-finance",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to pending tagihan"
+            },
+            {
+                "type": "action",
+                "description": "Click 'Konfirmasi Bayar'"
+            },
+            {
+                "type": "action",
+                "description": "Enter negative amount: -50000"
+            },
+            {
+                "type": "action",
+                "description": "Click process"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for negative amount"
+            },
+            {
+                "type": "action",
+                "description": "Enter amount as text: 'abc'"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify numeric validation error"
+            },
+            {
+                "type": "action",
+                "description": "Enter amount 0"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify minimum amount error or acceptance"
+            }
+        ]
+    },
+    {
+        "id": "FINANCE-004",
+        "title": "Payment - Upload Invalid Proof File",
+        "description": "Verify payment proof file type and size validation",
+        "category": "core-finance",
+        "priority": "Medium",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Open payment confirmation modal"
+            },
+            {
+                "type": "action",
+                "description": "Try uploading a .pdf file as proof"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify error: only images allowed"
+            },
+            {
+                "type": "action",
+                "description": "Try uploading image > 2MB"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify error: file too large (max 2MB)"
+            }
+        ]
+    },
+    {
+        "id": "FINANCE-005",
+        "title": "Tagihan - Year Range Validation",
+        "description": "Verify year input validation boundaries",
+        "category": "core-finance",
+        "priority": "Medium",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Open generate tagihan modal"
+            },
+            {
+                "type": "action",
+                "description": "Enter year: 2019 (below min 2020)"
+            },
+            {
+                "type": "action",
+                "description": "Click generate"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for year range"
+            },
+            {
+                "type": "action",
+                "description": "Enter year: 2035 (above max 2030)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for year range"
+            }
+        ]
+    },
+    {
+        "id": "GRADES-001",
+        "title": "Nilai Input - Score Out of Range",
+        "description": "Verify grade input validates score boundaries",
+        "category": "core-grades",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin or Guru"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to nilai input"
+            },
+            {
+                "type": "action",
+                "description": "Enter UTS score: 150 (above 100)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error: maximum 100"
+            },
+            {
+                "type": "action",
+                "description": "Enter UTS score: -10 (negative)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error: minimum 0"
+            },
+            {
+                "type": "action",
+                "description": "Enter valid score: 85"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify score is saved successfully"
+            }
+        ]
+    },
+    {
+        "id": "GRADES-002",
+        "title": "Nilai - Non-numeric Input Handling",
+        "description": "Verify grade fields reject non-numeric values",
+        "category": "core-grades",
+        "priority": "Medium",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Navigate to nilai input form"
+            },
+            {
+                "type": "action",
+                "description": "Enter 'abc' in tugas field"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify field rejects or shows error"
+            },
+            {
+                "type": "action",
+                "description": "Enter '85.5.5' (invalid decimal)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify proper handling of invalid format"
+            }
+        ]
+    },
+    {
+        "id": "SCHEDULE-001",
+        "title": "Jadwal - Conflict Detection",
+        "description": "Verify system detects schedule conflicts",
+        "category": "core-schedule",
+        "priority": "High",
+        "type": "core-functionality",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Create schedule: Senin 08:00-09:00 for Kelas 1A, Guru A"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify schedule created"
+            },
+            {
+                "type": "action",
+                "description": "Create another schedule: Senin 08:00-09:00 for Kelas 1B, Guru A (same teacher)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify conflict warning or prevention"
+            },
+            {
+                "type": "action",
+                "description": "Create schedule: Senin 08:30-09:30 for Kelas 1A, Guru B (overlapping time)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify room/class conflict detection"
+            }
+        ]
+    },
+    {
+        "id": "PPDB-001",
+        "title": "PPDB - Incomplete Required Documents",
+        "description": "Verify registration requires all mandatory documents",
+        "category": "core-ppdb",
+        "priority": "High",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Navigate to /ppdb"
+            },
+            {
+                "type": "action",
+                "description": "Fill all personal data fields"
+            },
+            {
+                "type": "action",
+                "description": "Skip uploading required documents"
+            },
+            {
+                "type": "action",
+                "description": "Submit registration"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify validation error for missing documents"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify registration not submitted"
+            }
+        ]
+    },
+    {
+        "id": "PPDB-002",
+        "title": "PPDB - Duplicate Email Prevention",
+        "description": "Verify same email cannot register twice",
+        "category": "core-ppdb",
+        "priority": "Critical",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Register with email: test@example.com"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify registration successful"
+            },
+            {
+                "type": "action",
+                "description": "Try registering again with same email"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify error: email already registered"
+            }
+        ]
+    },
+    {
+        "id": "SESSION-001",
+        "title": "Session - Timeout and Redirect",
+        "description": "Verify expired session redirects to login",
+        "category": "core-session",
+        "priority": "Critical",
+        "type": "failure-scenario",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as any user"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to protected page"
+            },
+            {
+                "type": "action",
+                "description": "Wait for session to expire or manually invalidate"
+            },
+            {
+                "type": "action",
+                "description": "Try to perform an action (save, delete)"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify redirect to login page"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify appropriate session expired message"
+            }
+        ]
+    },
+    {
+        "id": "SESSION-002",
+        "title": "CSRF Token - Invalid Token Rejection",
+        "description": "Verify forms reject invalid CSRF tokens",
+        "category": "core-security",
+        "priority": "Critical",
+        "type": "failure-scenario",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Open a form (e.g., create santri)"
+            },
+            {
+                "type": "action",
+                "description": "Manually tamper with CSRF token in form"
+            },
+            {
+                "type": "action",
+                "description": "Submit the form"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify 419 error or CSRF rejection"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify action is not performed"
+            }
+        ]
+    },
+    {
+        "id": "PAGINATION-001",
+        "title": "Pagination - Out of Range Page Number",
+        "description": "Verify graceful handling of invalid page numbers",
+        "category": "core-functionality",
+        "priority": "Medium",
+        "type": "edge-case",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Navigate to /admin/santri"
+            },
+            {
+                "type": "action",
+                "description": "Manually change URL to ?page=99999"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no error, shows last page or empty state"
+            },
+            {
+                "type": "action",
+                "description": "Change URL to ?page=-1"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify handled gracefully, defaults to page 1"
+            },
+            {
+                "type": "action",
+                "description": "Change URL to ?page=abc"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify non-numeric handled gracefully"
+            }
+        ]
+    },
+    {
+        "id": "ACTIVITY-001",
+        "title": "Activity Logs - Critical Actions Logged",
+        "description": "Verify all CRUD operations are logged",
+        "category": "core-audit",
+        "priority": "High",
+        "type": "core-functionality",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Create a new santri"
+            },
+            {
+                "type": "action",
+                "description": "Update the santri"
+            },
+            {
+                "type": "action",
+                "description": "Delete the santri"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to /admin/activity-logs"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify 'created' action logged with user and timestamp"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify 'updated' action logged"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify 'deleted' action logged"
+            }
+        ]
+    },
+    {
+        "id": "CMS-001",
+        "title": "Page Content - HTML Sanitization",
+        "description": "Verify CMS content sanitizes malicious HTML",
+        "category": "core-cms",
+        "priority": "Critical",
+        "type": "failure-scenario",
+        "steps": [
+            {
+                "type": "action",
+                "description": "Login as Admin"
+            },
+            {
+                "type": "action",
+                "description": "Navigate to CMS pages"
+            },
+            {
+                "type": "action",
+                "description": "Create page with content: <script>alert('xss')</script>"
+            },
+            {
+                "type": "action",
+                "description": "Save and view the page"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify script tag is escaped or removed"
+            },
+            {
+                "type": "assertion",
+                "description": "Verify no JavaScript execution"
+            }
+        ]
+    }
+]

@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:8000",
+  "loginUser": "admin@ponspes.test",
+  "loginPassword": "password",
+  "executionArgs": {
+    "projectName": "sekolah-system",
+    "projectPath": "c:\\laragon\\www\\sekolah-system",
+    "testIds": [],
+    "additionalInstruction": "Focus on edge cases and failure scenarios. Use the test plan from focused_test_plan.json which covers authentication failures, validation errors, duplicate prevention, XSS/SQL injection attempts, CBT exam edge cases, and finance validation.",
+    "envs": {
+      "API_KEY": "sk-user-PNbfkq50g7GaZgAADCQaSpVgbqfA3d61eV8WnQ8bBSPKzjetVWEmF8x4Ld3RlCR96QDFYEBbCTK3-rXRbjzk6WTYrINGnZ3kqRoD5k_HI7AstZFEaKxCzdap085zhlxpxVQ"
+    }
+  },
+  "proxy": "http://c109973c-47ec-4263-8bcb-5c870365e201:3Cu9TDqo9Yjmdt6giuQxQvDfsSDWLVvc@tun.testsprite.com:8080"
+}

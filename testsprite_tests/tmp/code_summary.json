@@ -1,0 +1,222 @@
+{
+    "tech_stack": [
+        "PHP 8.2",
+        "Laravel 12",
+        "Livewire 3",
+        "MySQL",
+        "Tailwind CSS",
+        "Vite",
+        "Laravel Breeze",
+        "DomPDF",
+        "Maatwebsite Excel"
+    ],
+    "features": [
+        {
+            "name": "Authentication & Authorization",
+            "description": "User authentication with multiple roles (Admin, Operator, Guru, Santri, Wali) using Laravel Breeze. Role-based access control for different portals.",
+            "files": [
+                "app/Models/User.php",
+                "routes/auth.php",
+                "resources/views/auth/login.blade.php"
+            ]
+        },
+        {
+            "name": "Admin Dashboard",
+            "description": "Analytics dashboard with statistics, charts, and system overview for administrators.",
+            "files": [
+                "app/Livewire/Admin/AnalyticsDashboard.php",
+                "resources/views/livewire/admin/analytics-dashboard.blade.php"
+            ]
+        },
+        {
+            "name": "Santri Management",
+            "description": "CRUD operations for managing student (santri) data including personal information, class assignment, and status.",
+            "files": [
+                "app/Models/Santri.php",
+                "app/Livewire/Admin/Santri/SantriIndex.php",
+                "app/Livewire/Admin/Santri/SantriForm.php"
+            ]
+        },
+        {
+            "name": "Teacher (Guru) Management",
+            "description": "Manage teacher data, assignments, and related information.",
+            "files": [
+                "app/Models/Guru.php",
+                "app/Livewire/Admin/Guru/GuruIndex.php",
+                "app/Livewire/Admin/Guru/GuruForm.php"
+            ]
+        },
+        {
+            "name": "Class (Kelas) Management",
+            "description": "Manage classes including class names, levels, and student assignments.",
+            "files": [
+                "app/Models/Kelas.php",
+                "app/Livewire/Admin/Kelas/KelasIndex.php",
+                "app/Livewire/Admin/Kelas/KelasForm.php"
+            ]
+        },
+        {
+            "name": "Subject (Mapel) Management",
+            "description": "Manage academic subjects and curriculum.",
+            "files": [
+                "app/Models/Mapel.php",
+                "app/Livewire/Admin/Mapel/MapelIndex.php",
+                "app/Livewire/Admin/Mapel/MapelForm.php"
+            ]
+        },
+        {
+            "name": "Schedule (Jadwal) Management",
+            "description": "Manage class schedules, timetables, and scheduling.",
+            "files": [
+                "app/Models/Jadwal.php",
+                "app/Livewire/Admin/Jadwal/JadwalIndex.php",
+                "app/Livewire/Admin/Jadwal/JadwalForm.php"
+            ]
+        },
+        {
+            "name": "Grades (Nilai) Management",
+            "description": "Input, manage, and view student grades with different scoring categories.",
+            "files": [
+                "app/Models/Nilai.php",
+                "app/Livewire/Admin/Nilai/NilaiIndex.php",
+                "app/Livewire/Admin/Nilai/NilaiForm.php",
+                "app/Livewire/Admin/Nilai/NilaiInput.php"
+            ]
+        },
+        {
+            "name": "Attendance Management",
+            "description": "Track and manage attendance for both students and teachers.",
+            "files": [
+                "app/Models/Attendance.php",
+                "app/Models/GuruAttendance.php",
+                "app/Livewire/Admin/Attendance/AttendanceIndex.php"
+            ]
+        },
+        {
+            "name": "CBT (Computer Based Testing)",
+            "description": "Online examination system with exam creation, question banks, and student attempt tracking.",
+            "files": [
+                "app/Models/Exam.php",
+                "app/Models/ExamAttempt.php",
+                "app/Models/ExamAnswer.php",
+                "app/Models/QuestionBank.php",
+                "app/Livewire/Admin/Cbt/ExamIndex.php",
+                "app/Livewire/Admin/Cbt/QuestionBankIndex.php"
+            ]
+        },
+        {
+            "name": "PPDB (Online Admission)",
+            "description": "Online student registration and admission system with document upload.",
+            "files": [
+                "app/Models/PpdbRegistration.php",
+                "app/Models/PpdbDocument.php",
+                "app/Livewire/Admin/Ppdb/PpdbIndex.php",
+                "app/Livewire/Ppdb/PpdbForm.php"
+            ]
+        },
+        {
+            "name": "Finance Management",
+            "description": "Payment tracking, billing (tagihan), and payment types management.",
+            "files": [
+                "app/Models/Payment.php",
+                "app/Models/PaymentType.php",
+                "app/Models/Tagihan.php",
+                "app/Livewire/Admin/Finance/PaymentIndex.php"
+            ]
+        },
+        {
+            "name": "Announcements",
+            "description": "Create and manage announcements for different user groups.",
+            "files": [
+                "app/Models/Announcement.php",
+                "app/Livewire/Admin/Announcements/AnnouncementIndex.php"
+            ]
+        },
+        {
+            "name": "Messaging System",
+            "description": "Internal messaging system for communication between users.",
+            "files": [
+                "app/Models/Message.php",
+                "app/Mail/TestEmail.php"
+            ]
+        },
+        {
+            "name": "CMS (Content Management)",
+            "description": "Manage website content including banners, pages, testimonials, and landing page content.",
+            "files": [
+                "app/Models/Banner.php",
+                "app/Models/Page.php",
+                "app/Models/Testimonial.php",
+                "app/Models/LandingPageContent.php",
+                "app/Livewire/Admin/Cms/PagesIndex.php",
+                "app/Livewire/Admin/Cms/BannersIndex.php"
+            ]
+        },
+        {
+            "name": "Wali (Guardian) Portal",
+            "description": "Parent/guardian portal to view child's academic progress, attendance, and payments.",
+            "files": [
+                "app/Models/Wali.php",
+                "app/Livewire/Wali/WaliDashboard.php",
+                "resources/views/wali/dashboard.blade.php"
+            ]
+        },
+        {
+            "name": "Santri Portal",
+            "description": "Student portal for viewing grades, schedules, and taking exams.",
+            "files": [
+                "app/Livewire/Santri/SantriDashboard.php",
+                "resources/views/santri/dashboard.blade.php"
+            ]
+        },
+        {
+            "name": "Guru Portal",
+            "description": "Teacher portal for managing classes, inputting grades, and viewing schedules.",
+            "files": [
+                "app/Livewire/Guru/GuruDashboard.php",
+                "resources/views/guru/dashboard.blade.php"
+            ]
+        },
+        {
+            "name": "AI RPP Generator",
+            "description": "AI-powered lesson plan (RPP) generator for teachers.",
+            "files": [
+                "app/Livewire/Admin/Ai/RppGenerator.php",
+                "resources/views/livewire/admin/ai/rpp-generator.blade.php"
+            ]
+        },
+        {
+            "name": "Export/Import",
+            "description": "Data export to Excel/PDF and import functionality.",
+            "files": [
+                "app/Livewire/Admin/ExportData.php",
+                "app/Exports/SantriExport.php",
+                "app/Imports/SantriImport.php"
+            ]
+        },
+        {
+            "name": "Activity Logs",
+            "description": "Track user activities in the system for audit purposes.",
+            "files": [
+                "app/Models/ActivityLog.php",
+                "app/Livewire/Admin/ActivityLogs.php"
+            ]
+        },
+        {
+            "name": "Site Settings",
+            "description": "Configure system-wide settings including school information.",
+            "files": [
+                "app/Models/SiteSetting.php",
+                "app/Livewire/Admin/Settings/SiteSettings.php"
+            ]
+        },
+        {
+            "name": "Landing Page",
+            "description": "Public-facing landing page for the school website.",
+            "files": [
+                "resources/views/landing/index.blade.php",
+                "app/Livewire/Frontend/LandingPage.php"
+            ]
+        }
+    ]
+}
