@@ -1,33 +1,41 @@
 <div>
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-            <h1 class="font-heading text-2xl font-bold text-gray-900">Pengaturan Sistem</h1>
-            <p class="text-gray-500">Konfigurasi sistem dan informasi pesantren</p>
+    @if (session()->has('success'))
+        <div class="mb-6 p-4 bg-green-50 border whitespace-pre-wrap border-green-200 text-green-700 rounded-lg flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            {{ session('success') }}
         </div>
-    </div>
+    @endif
 
-    <!-- Tabs -->
-    <div class="mb-6" x-data="{ activeTab: 'pesantren' }">
-        <div class="border-b border-gray-200">
-            <nav class="flex space-x-8">
-                <button @click="activeTab = 'pesantren'" 
-                        :class="activeTab === 'pesantren' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                        class="py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                    Informasi Pesantren
-                </button>
-                <button @click="activeTab = 'ppdb'" 
-                        :class="activeTab === 'ppdb' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                        class="py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                    Pengaturan PPDB
-                </button>
-                <button @click="activeTab = 'tahun'" 
-                        :class="activeTab === 'tahun' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                        class="py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                    Tahun Ajaran
-                </button>
-            </nav>
+    <form wire:submit.prevent="save">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+                <h1 class="font-heading text-2xl font-bold text-gray-900">Pengaturan Sistem</h1>
+                <p class="text-gray-500">Konfigurasi sistem dan informasi pesantren</p>
+            </div>
         </div>
+
+        <!-- Tabs -->
+        <div class="mb-6" x-data="{ activeTab: 'pesantren' }">
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8">
+                    <button type="button" @click="activeTab = 'pesantren'" 
+                            :class="activeTab === 'pesantren' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                            class="py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        Informasi Pesantren
+                    </button>
+                    <button type="button" @click="activeTab = 'ppdb'" 
+                            :class="activeTab === 'ppdb' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                            class="py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        Pengaturan PPDB
+                    </button>
+                    <button type="button" @click="activeTab = 'tahun'" 
+                            :class="activeTab === 'tahun' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                            class="py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        Tahun Ajaran
+                    </button>
+                </nav>
+            </div>
 
         <!-- Tab Content: Informasi Pesantren -->
         <div x-show="activeTab === 'pesantren'" class="mt-6">
@@ -44,55 +52,53 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pesantren</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="Pondok Pesantren Nurul Hidayah">
+                            <input type="text" wire:model.defer="nama_pesantren" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Singkat</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="PPNH">
+                            <input type="text" wire:model.defer="nama_singkat" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Lengkap</label>
-                        <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">Jl. Pesantren No. 123, Kelurahan Barokah, Kecamatan Hidayah, Kota Bandung, Jawa Barat 40123</textarea>
+                        <textarea rows="3" wire:model.defer="alamat_lengkap" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">No. Telepon</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="(022) 1234567">
+                            <input type="text" wire:model.defer="no_telepon" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="08123456789">
+                            <input type="text" wire:model.defer="whatsapp" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="info@ponspes.sch.id">
+                            <input type="email" wire:model.defer="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pimpinan</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="KH. Ahmad Hidayatullah, Lc., M.A.">
+                            <input type="text" wire:model.defer="nama_pimpinan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Berdiri</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="1985">
+                            <input type="text" wire:model.defer="tahun_berdiri" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Visi Pesantren</label>
-                        <textarea rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">Menjadi lembaga pendidikan Islam terdepan yang melahirkan generasi Qurani berakhlak mulia</textarea>
+                        <textarea rows="2" wire:model.defer="visi_pesantren" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Misi Pesantren</label>
-                        <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">1. Menyelenggarakan pendidikan Islam yang berkualitas
-2. Membentuk karakter santri yang berakhlakul karimah
-3. Membekali santri dengan ilmu agama dan umum</textarea>
+                        <textarea rows="3" wire:model.defer="misi_pesantren" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea>
                     </div>
                 </div>
             </div>
@@ -117,29 +123,33 @@
                             <p class="text-sm text-gray-500">Buka atau tutup pendaftaran PPDB online</p>
                         </div>
                         <div class="flex items-center">
-                            <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-700">Dibuka</span>
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" wire:model.defer="ppdb_status" class="sr-only peer">
+                                <div class="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
+                                <span class="ms-3 text-sm font-bold text-gray-700">{{ $ppdb_status ? 'Dibuka' : 'Ditutup' }}</span>
+                            </label>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Ajaran PPDB</label>
-                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="2025/2026">
+                            <input type="text" wire:model.defer="ppdb_tahun_ajaran" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kuota Pendaftaran</label>
-                            <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="150">
+                            <input type="number" wire:model.defer="ppdb_kuota" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai Pendaftaran</label>
-                            <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="2025-01-01">
+                            <input type="date" wire:model.defer="ppdb_start_date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Selesai Pendaftaran</label>
-                            <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="2025-06-30">
+                            <input type="date" wire:model.defer="ppdb_end_date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     
@@ -147,13 +157,13 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Biaya Pendaftaran</label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
-                            <input type="text" class="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" value="250.000">
+                            <input type="text" wire:model.defer="ppdb_biaya" class="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Informasi Tambahan PPDB</label>
-                        <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">Pendaftaran dapat dilakukan secara online melalui website resmi. Dokumen yang diperlukan: Akta kelahiran, Kartu Keluarga, Ijazah/SKL terakhir.</textarea>
+                        <textarea rows="3" wire:model.defer="ppdb_info" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea>
                     </div>
                 </div>
             </div>
@@ -224,13 +234,14 @@
         </div>
     </div>
 
-    <!-- Save Button -->
-    <div class="mt-6 flex justify-end">
-        <button class="btn-primary">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            Simpan Pengaturan
-        </button>
-    </div>
+        <!-- Save Button -->
+        <div class="mt-6 flex justify-end">
+            <button type="submit" class="btn-primary">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Simpan Pengaturan
+            </button>
+        </div>
+    </form>
 </div>

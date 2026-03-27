@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('kegiatan_attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('kegiatan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('santri_id')->constrained()->cascadeOnDelete();
+            $table->date('tanggal');
+            $table->time('waktu_tap');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('kegiatan_attendances');
     }
 };

@@ -31,6 +31,7 @@ class SantriExport implements FromCollection, WithHeadings, WithStyles, WithMapp
         return [
             $santri->nis,
             $santri->nisn,
+            $santri->rfid_uid,
             $santri->nama_lengkap,
             $santri->jenis_kelamin,
             $santri->tempat_lahir,
@@ -50,6 +51,7 @@ class SantriExport implements FromCollection, WithHeadings, WithStyles, WithMapp
         return [
             'NIS',
             'NISN',
+            'RFID UID',
             'Nama Lengkap',
             'Jenis Kelamin (L/P)',
             'Tempat Lahir',

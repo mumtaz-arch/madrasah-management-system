@@ -38,10 +38,14 @@
 
     @if($kelasId && count($attendances) > 0)
         <!-- Stats -->
-        <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
             <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
                 <p class="text-2xl font-bold text-green-600">{{ $stats['hadir'] }}</p>
                 <p class="text-xs text-green-600">Hadir</p>
+            </div>
+            <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
+                <p class="text-2xl font-bold text-orange-600">{{ $stats['terlambat'] }}</p>
+                <p class="text-xs text-orange-600">Terlambat</p>
             </div>
             <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
                 <p class="text-2xl font-bold text-blue-600">{{ $stats['izin'] }}</p>
@@ -66,6 +70,8 @@
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">#</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">NIS</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Nama Santri</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Waktu Masuk</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Waktu Pulang</th>
                             <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Status Kehadiran</th>
                         </tr>
                     </thead>
@@ -76,11 +82,22 @@
                                 <td class="px-6 py-4 text-sm font-mono text-gray-600">{{ $att['nis'] }}</td>
                                 <td class="px-6 py-4 font-medium text-gray-900">{{ $att['nama'] }}</td>
                                 <td class="px-6 py-4">
+                                    <input type="time" wire:model="attendances.{{ $santriId }}.waktu_masuk" class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <input type="time" wire:model="attendances.{{ $santriId }}.waktu_pulang" class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                                </td>
+                                <td class="px-6 py-4">
                                     <div class="flex items-center justify-center space-x-2">
                                         <label class="inline-flex items-center">
                                             <input type="radio" wire:model="attendances.{{ $santriId }}.status" value="hadir" 
                                                    class="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500">
                                             <span class="ml-1 text-xs text-green-600 font-medium">H</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" wire:model="attendances.{{ $santriId }}.status" value="terlambat" 
+                                                   class="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500">
+                                            <span class="ml-1 text-xs text-orange-600 font-medium">T</span>
                                         </label>
                                         <label class="inline-flex items-center">
                                             <input type="radio" wire:model="attendances.{{ $santriId }}.status" value="izin"

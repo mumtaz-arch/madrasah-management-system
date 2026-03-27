@@ -83,6 +83,45 @@
             </div>
         </div>
 
+        @if($kelasWali)
+        <!-- Presensi Kelas Wali -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h3 class="font-heading font-semibold text-gray-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Presensi Kelas {{ $kelasWali->nama_kelas }} (Hari Ini)
+                </h3>
+            </div>
+            <div class="p-4 sm:p-6">
+                <!-- Grid of stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-center">
+                        <p class="text-xs text-gray-500 font-medium">Belum Absen</p>
+                        <p class="text-xl font-bold text-gray-700">{{ $presensiKelasHariIni['belum_absen'] ?? 0 }}</p>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+                        <p class="text-xs text-green-600 font-medium">Hadir</p>
+                        <p class="text-xl font-bold text-green-700">{{ $presensiKelasHariIni['hadir'] ?? 0 }}</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+                        <p class="text-xs text-blue-600 font-medium">Izin</p>
+                        <p class="text-xl font-bold text-blue-700">{{ $presensiKelasHariIni['izin'] ?? 0 }}</p>
+                    </div>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
+                        <p class="text-xs text-yellow-600 font-medium">Sakit</p>
+                        <p class="text-xl font-bold text-yellow-700">{{ $presensiKelasHariIni['sakit'] ?? 0 }}</p>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+                        <p class="text-xs text-red-600 font-medium">Alpha</p>
+                        <p class="text-xl font-bold text-red-700">{{ $presensiKelasHariIni['alpha'] ?? 0 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <!-- Jadwal Hari Ini -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -200,16 +239,20 @@
                             <div x-data="{ search: '' }">
                                 @php
                                     $hadirCount = collect($attendanceList)->where('status', 'H')->count();
+                                    $terlambatCount = collect($attendanceList)->where('status', 'T')->count();
                                     $sakitCount = collect($attendanceList)->where('status', 'S')->count();
                                     $izinCount = collect($attendanceList)->where('status', 'I')->count();
+                                    $kegiatanCount = collect($attendanceList)->where('status', 'K')->count();
                                     $alfaCount = collect($attendanceList)->where('status', 'A')->count();
                                 @endphp
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                                     <label class="text-xs font-semibold text-gray-600">Kehadiran Santri ({{ count($attendanceList) }})</label>
                                     <div class="flex items-center space-x-1 text-xs flex-wrap gap-y-1">
                                         <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-bold">H:{{ $hadirCount }}</span>
+                                        <span class="bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-bold">T:{{ $terlambatCount }}</span>
                                         <span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-bold">S:{{ $sakitCount }}</span>
                                         <span class="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">I:{{ $izinCount }}</span>
+                                        <span class="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded font-bold">K:{{ $kegiatanCount }}</span>
                                         <span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-bold">A:{{ $alfaCount }}</span>
                                     </div>
                                 </div>
@@ -235,17 +278,28 @@
                                         <tbody class="divide-y divide-gray-100">
                                             @foreach($attendanceList as $index => $santri)
                                                 <tr x-show="search === '' || '{{ strtolower(addslashes($santri['nama'])) }}'.includes(search.toLowerCase())" 
-                                                    class="table-row hover:bg-gray-50 transition-colors {{ $santri['status'] !== 'H' ? 'bg-orange-50' : '' }}">
+                                                    class="table-row hover:bg-gray-50 transition-colors {{ !in_array($santri['status'], ['H', 'T']) ? 'bg-orange-50' : '' }}">
                                                     <td class="px-2 sm:px-3 py-1.5 text-xs text-gray-400 text-center w-8 sm:w-10">{{ $index + 1 }}</td>
-                                                    <td class="px-2 sm:px-3 py-1.5 text-sm text-gray-800 truncate max-w-[120px] sm:max-w-none">{{ $santri['nama'] }}</td>
+                                                    <td class="px-2 sm:px-3 py-1.5 text-sm text-gray-800 truncate max-w-[120px] sm:max-w-none">
+                                                        {{ $santri['nama'] }}
+                                                        @if($santri['waktu_masuk'])
+                                                            <span class="block text-[10px] text-gray-500 font-medium">Scan: {{ \Carbon\Carbon::parse($santri['waktu_masuk'])->format('H:i') }}</span>
+                                                        @else
+                                                            <span class="block text-[10px] text-red-400 font-medium">Belum Scan</span>
+                                                        @endif
+                                                    </td>
                                                     <td class="px-2 sm:px-3 py-1.5 text-center">
                                                         <div class="inline-flex rounded-md overflow-hidden border border-gray-200 shadow-sm">
                                                             <button type="button" wire:click="toggleAttendance({{ $index }}, 'H')"
                                                                 class="px-2 py-1 text-xs font-bold transition-all {{ $santri['status'] === 'H' ? 'bg-green-500 text-white' : 'bg-white text-gray-400 hover:bg-green-50 hover:text-green-600' }}">H</button>
+                                                            <button type="button" wire:click="toggleAttendance({{ $index }}, 'T')"
+                                                                class="px-2 py-1 text-xs font-bold border-l border-gray-200 transition-all {{ $santri['status'] === 'T' ? 'bg-orange-500 text-white' : 'bg-white text-gray-400 hover:bg-orange-50 hover:text-orange-600' }}">T</button>
                                                             <button type="button" wire:click="toggleAttendance({{ $index }}, 'S')"
                                                                 class="px-2 py-1 text-xs font-bold border-l border-gray-200 transition-all {{ $santri['status'] === 'S' ? 'bg-yellow-500 text-white' : 'bg-white text-gray-400 hover:bg-yellow-50 hover:text-yellow-600' }}">S</button>
                                                             <button type="button" wire:click="toggleAttendance({{ $index }}, 'I')"
                                                                 class="px-2 py-1 text-xs font-bold border-l border-gray-200 transition-all {{ $santri['status'] === 'I' ? 'bg-blue-500 text-white' : 'bg-white text-gray-400 hover:bg-blue-50 hover:text-blue-600' }}">I</button>
+                                                            <button type="button" wire:click="toggleAttendance({{ $index }}, 'K')"
+                                                                class="px-2 py-1 text-xs font-bold border-l border-gray-200 transition-all {{ $santri['status'] === 'K' ? 'bg-purple-500 text-white' : 'bg-white text-gray-400 hover:bg-purple-50 hover:text-purple-600' }}">K</button>
                                                             <button type="button" wire:click="toggleAttendance({{ $index }}, 'A')"
                                                                 class="px-2 py-1 text-xs font-bold border-l border-gray-200 transition-all {{ $santri['status'] === 'A' ? 'bg-red-500 text-white' : 'bg-white text-gray-400 hover:bg-red-50 hover:text-red-600' }}">A</button>
                                                         </div>
@@ -255,7 +309,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <p class="text-center text-xs text-gray-400 mt-1.5">H = Hadir &bull; S = Sakit &bull; I = Izin &bull; A = Alfa</p>
+                                <p class="text-center text-xs text-gray-400 mt-1.5">H = Hadir &bull; T = Terlambat &bull; S = Sakit &bull; I = Izin &bull; A = Alfa</p>
                             </div>
 
                             <!-- Catatan -->
@@ -269,9 +323,9 @@
                         <div class="bg-gray-50 px-4 sm:px-5 py-3 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                             <div class="text-xs text-gray-500">
                                 @if($isOutsideTime)
-                                    <span class="text-amber-600 font-semibold">⚠ Tidak dapat menyimpan di luar jam 07.00 - 15.00</span>
+                                    <span class="text-amber-600 font-semibold">⚠ Tidak dapat menyimpan di luar jam {{ \App\Models\AppSetting::getValue('journal_open_time', '07:00') }} - {{ \App\Models\AppSetting::getValue('journal_close_time', '16:00') }}</span>
                                 @else
-                                    <span class="font-semibold text-green-600">{{ $hadirCount }}</span> hadir, <span class="font-semibold text-red-600">{{ $sakitCount + $izinCount + $alfaCount }}</span> tidak hadir
+                                    <span class="font-semibold text-green-600">{{ $hadirCount + $terlambatCount }}</span> hadir/terlambat, <span class="font-semibold text-red-600">{{ $sakitCount + $izinCount + $alfaCount }}</span> tidak hadir
                                 @endif
                             </div>
                             <div class="flex space-x-2">

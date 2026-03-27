@@ -12,6 +12,8 @@ use App\Models\Jadwal;
 use App\Models\SiteSetting;
 use App\Models\Banner;
 use App\Models\Announcement;
+use App\Models\LandingPageContent;
+use App\Models\Program;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -24,6 +26,12 @@ class DatabaseSeeder extends Seeder
         
         // 2. Banners
         $this->seedBanners();
+
+        // 2b. Landing Page CMS Content
+        $this->seedLandingPageContent();
+
+        // 2c. Programs
+        $this->seedPrograms();
         
         // 3. Admin User
         $admin = User::create([
@@ -99,10 +107,10 @@ class DatabaseSeeder extends Seeder
     {
         $banners = [
             [
-                'title' => 'Selamat Datang di Pondok Pesantren Nurul Hidayah',
-                'subtitle' => 'Membentuk Generasi Qurani yang Berakhlak Mulia, Berwawasan Luas, dan Siap Menghadapi Tantangan Zaman',
-                'image' => 'https://images.unsplash.com/photo-1585036156171-384164a8c675?w=1920',
-                'cta_text' => 'Daftar PPDB',
+                'title' => 'Mewujudkan Generasi Rabbani',
+                'subtitle' => 'Pondok Pesantren Pancasila Reo mencetak kader ulama intelek yang berakhlak mulia dan berwawasan luas.',
+                'image' => 'cms/banners/hero-1.png',
+                'cta_text' => 'DAFTAR SANTRI BARU 2026/2027',
                 'cta_link' => '/ppdb',
                 'sort_order' => 1,
                 'is_active' => true,
@@ -110,9 +118,9 @@ class DatabaseSeeder extends Seeder
             [
                 'title' => 'Program Tahfidz 30 Juz',
                 'subtitle' => 'Dengan metode pembelajaran modern dan bimbingan ustadz berpengalaman',
-                'image' => 'https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=1920',
+                'image' => 'cms/banners/hero-2.png',
                 'cta_text' => 'Pelajari Program',
-                'cta_link' => '#programs',
+                'cta_link' => '#program',
                 'sort_order' => 2,
                 'is_active' => true,
             ],
@@ -120,6 +128,100 @@ class DatabaseSeeder extends Seeder
 
         foreach ($banners as $banner) {
             Banner::create($banner);
+        }
+    }
+
+    private function seedLandingPageContent(): void
+    {
+        $contents = [
+            // Hero
+            ['key' => 'hero_title', 'value' => 'Mewujudkan Generasi Rabbani', 'type' => 'text', 'section' => 'hero'],
+            ['key' => 'hero_subtitle', 'value' => 'Pondok Pesantren Pancasila Reo mencetak kader ulama intelek yang berakhlak mulia dan berwawasan luas.', 'type' => 'text', 'section' => 'hero'],
+            ['key' => 'hero_image', 'value' => 'cms/hero/hero-bg.png', 'type' => 'image', 'section' => 'hero'],
+
+            // About
+            ['key' => 'about_title', 'value' => 'Membangun Peradaban dengan Al-Qur\'an dan Sunnah', 'type' => 'text', 'section' => 'about'],
+            ['key' => 'about_text', 'value' => 'Pondok Pesantren Pancasila Reo adalah lembaga pendidikan Islam modern yang memadukan kurikulum nasional dengan kurikulum pesantren salaf. Kami bertekad melahirkan generasi yang tidak hanya cerdas secara intelektual, tetapi juga memiliki kedalaman spiritual dan akhlak mulia.', 'type' => 'text', 'section' => 'about'],
+            ['key' => 'about_image', 'value' => 'cms/about/about.png', 'type' => 'image', 'section' => 'about'],
+
+            // Statistics
+            ['key' => 'stat_santri', 'value' => '500+', 'type' => 'text', 'section' => 'statistics'],
+            ['key' => 'stat_alumni', 'value' => '1.200+', 'type' => 'text', 'section' => 'statistics'],
+            ['key' => 'stat_pengajar', 'value' => '45+', 'type' => 'text', 'section' => 'statistics'],
+            ['key' => 'stat_akreditasi', 'value' => 'A', 'type' => 'text', 'section' => 'statistics'],
+
+            // Vision
+            ['key' => 'vision_text', 'value' => '"Wujudkan generasi islami berkarakter yang seimbang secara spiritual, intelektual, moral dan keterampilan, ber-tafaqquh fiddin sebagai kader umat yang rahmatan lil alamin."', 'type' => 'text', 'section' => 'vision'],
+            ['key' => 'vision_subtext', 'value' => 'Visi Pondok Pesantren Pancasila Reo', 'type' => 'text', 'section' => 'vision'],
+
+            // Contact
+            ['key' => 'contact_address', 'value' => 'Jl. Pesantren No. 1, Reo, Kab. Manggarai, NTT', 'type' => 'text', 'section' => 'contact'],
+            ['key' => 'contact_phone', 'value' => '+62 812 3456 7890', 'type' => 'text', 'section' => 'contact'],
+            ['key' => 'contact_email', 'value' => 'info@ponpespanscasilareo.sch.id', 'type' => 'text', 'section' => 'contact'],
+
+            // Social Media
+            ['key' => 'social_facebook', 'value' => 'https://facebook.com/ponpespancasilareo', 'type' => 'text', 'section' => 'social'],
+            ['key' => 'social_instagram', 'value' => 'https://instagram.com/ponpespancasilareo', 'type' => 'text', 'section' => 'social'],
+            ['key' => 'social_youtube', 'value' => 'https://youtube.com/@ponpespancasilareo', 'type' => 'text', 'section' => 'social'],
+            ['key' => 'social_whatsapp', 'value' => '6281234567890', 'type' => 'text', 'section' => 'social'],
+
+            // Footer
+            ['key' => 'footer_text', 'value' => 'Mewujudkan generasi Islam yang kaffah, berilmu, dan berakhlak mulia untuk kemajuan umat dan bangsa.', 'type' => 'text', 'section' => 'footer'],
+
+            // Map
+            ['key' => 'map_embed', 'value' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3943.4!2d120.4!3d-8.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMzYnMDAuMCJTIDEyMMKwMjQnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567890', 'type' => 'text', 'section' => 'map'],
+
+            // Testimonials
+            ['key' => 'testimonials', 'value' => json_encode([
+                ['name' => 'H. Abdul Karim', 'text' => 'Alhamdulillah, anak saya mendapat bimbingan yang sangat baik di Ponpes Pancasila Reo. Akhlak dan hafalannya meningkat pesat.', 'role' => 'Wali Santri'],
+                ['name' => 'Ustadzah Maryam', 'text' => 'Lingkungan yang kondusif dan kurikulum terpadu menjadikan santri-santri mampu berprestasi di bidang akademik dan agama.', 'role' => 'Alumni Pengajar'],
+                ['name' => 'Muhammad Faris', 'text' => 'Saya bangga menjadi alumni Ponpes Pancasila Reo. Ilmu yang saya dapatkan sangat bermanfaat untuk kehidupan saya sekarang.', 'role' => 'Alumni 2020'],
+            ]), 'type' => 'json', 'section' => 'testimonials'],
+
+            // Achievements
+            ['key' => 'achievements', 'value' => json_encode([
+                ['title' => 'Juara 1 MTQ Tingkat Provinsi NTT', 'year' => '2025', 'description' => 'Cabang Tilawatil Quran putra berhasil meraih juara pertama.'],
+                ['title' => 'Juara 2 Olimpiade Matematika', 'year' => '2025', 'description' => 'Tingkat Kabupaten Manggarai dalam ajang Kompetisi Sains Nasional.'],
+                ['title' => 'Akreditasi A', 'year' => '2024', 'description' => 'Mendapatkan akreditasi A dari BAN-S/M untuk standar pendidikan nasional.'],
+            ]), 'type' => 'json', 'section' => 'achievements'],
+        ];
+
+        foreach ($contents as $content) {
+            LandingPageContent::create($content);
+        }
+    }
+
+    private function seedPrograms(): void
+    {
+        $programs = [
+            [
+                'title' => 'Tahfidzul Qur\'an',
+                'slug' => 'tahfidzul-quran',
+                'description' => 'Program unggulan menghafal Al-Qur\'an 30 Juz dengan sanad bersambung dan metode mutqin.',
+                'icon' => 'book-open',
+                'is_featured' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'Pendidikan Umum & Agama',
+                'slug' => 'pendidikan-umum-agama',
+                'description' => 'Kurikulum terpadu yang memadukan ilmu umum dan pendidikan agama Islam secara seimbang.',
+                'icon' => 'academic-cap',
+                'is_featured' => true,
+                'sort_order' => 2,
+            ],
+            [
+                'title' => 'Pembinaan Karakter',
+                'slug' => 'pembinaan-karakter',
+                'description' => 'Membentuk karakter santri yang mandiri, disiplin, dan berakhlakul karimah melalui kegiatan harian.',
+                'icon' => 'users',
+                'is_featured' => true,
+                'sort_order' => 3,
+            ],
+        ];
+
+        foreach ($programs as $program) {
+            Program::create($program);
         }
     }
 

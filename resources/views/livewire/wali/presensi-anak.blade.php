@@ -139,6 +139,56 @@
             </div>
         </div>
     </div>
+
+    <!-- Detailed Log Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mt-6 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="font-semibold text-gray-900">Rincian Waktu Kehadiran</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Tanggal</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Waktu Masuk</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Waktu Pulang</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @foreach(array_reverse(array_filter($presensiData, fn($d) => $d['status'] !== null)) as $log)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">{{ $log['hari'] }}, {{ \Carbon\Carbon::parse($log['tanggal'])->format('d M Y') }}</td>
+                            <td class="px-6 py-4 text-sm font-medium">
+                                <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full 
+                                    {{ $log['status'] === 'hadir' ? 'bg-green-100 text-green-700' : '' }}
+                                    {{ $log['status'] === 'izin' ? 'bg-blue-100 text-blue-700' : '' }}
+                                    {{ $log['status'] === 'sakit' ? 'bg-yellow-100 text-yellow-700' : '' }}
+                                    {{ $log['status'] === 'alpha' ? 'bg-red-100 text-red-700' : '' }}">
+                                    {{ ucfirst($log['status']) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                {{ $log['waktu_masuk'] ? substr($log['waktu_masuk'], 0, 5) : '-' }}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                {{ $log['waktu_pulang'] ? substr($log['waktu_pulang'], 0, 5) : '-' }}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                {{ $log['keterangan'] ?? '-' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    @if(empty(array_filter($presensiData, fn($d) => $d['status'] !== null)))
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Belum ada catatan kehadiran bulan ini.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </div>
     @else
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
         <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

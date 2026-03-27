@@ -14,14 +14,29 @@ Route::get('/', function () {
     return view('landing.index');
 })->name('home');
 
+Route::get('/berita/{slug}', function ($slug) {
+    $berita = \App\Models\Announcement::where('slug', $slug)
+        ->where('is_active', true)
+        ->firstOrFail();
+    
+    // Pass related news for sidebar
+    $relatedNews = \App\Models\Announcement::active()
+        ->where('id', '!=', $berita->id)
+        ->latest('published_at')
+        ->take(4)
+        ->get();
+
+    return view('landing.berita.show', compact('berita', 'relatedNews'));
+})->name('berita.show');
+
 // PPDB Public Routes
 Route::get('/ppdb', function () {
     return view('ppdb.index');
 })->name('ppdb');
 
 Route::get('/ppdb/daftar', function () {
-    return view('ppdb.form');
-})->name('ppdb.form');
+    return view('ppdb.daftar');
+})->name('ppdb.daftar');
 
 // Dynamic Pages
 Route::get('/page/{slug}', function ($slug) {
@@ -189,10 +204,12 @@ Route::middleware(['auth', 'role:admin,operator'])->prefix('admin')->name('admin
         return view('admin.banners.index');
     })->name('banners.index');
     
-    // Announcements
+    // Announcements (Berita/Blog)
     Route::get('/announcements', function () {
         return view('admin.announcements.index');
     })->name('announcements.index');
+    Route::get('/announcements/create', \App\Livewire\Admin\Announcements\AnnouncementForm::class)->name('announcements.create');
+    Route::get('/announcements/{id}/edit', \App\Livewire\Admin\Announcements\AnnouncementForm::class)->name('announcements.edit');
     
     // CMS Pages
     Route::get('/cms/pages', function () {
@@ -313,6 +330,9 @@ Route::middleware(['auth', 'role:admin,operator'])->prefix('admin')->name('admin
     Route::get('/cms/settings', \App\Livewire\Admin\Cms\LandingPageSettings::class)->name('cms.settings');
     Route::get('/cms/programs', \App\Livewire\Admin\Cms\ProgramManager::class)->name('cms.programs');
 
+    // Settings
+    Route::get('/settings/general', \App\Livewire\Admin\Settings\GeneralSettings::class)->name('settings.general');
+
     // Teacher Journal Routes
     Route::get('/journal/export', [\App\Http\Controllers\Admin\JournalController::class, 'export'])->name('journal.export');
     Route::resource('journal', \App\Http\Controllers\Admin\JournalController::class)->names([
@@ -321,6 +341,16 @@ Route::middleware(['auth', 'role:admin,operator'])->prefix('admin')->name('admin
         'destroy' => 'journal.destroy',
     ])->only(['index', 'show', 'destroy']);
     Route::patch('/journal/{journal}/verify', [\App\Http\Controllers\Admin\JournalController::class, 'verify'])->name('journal.verify');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Operator Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:operator,admin'])->prefix('operator')->name('operator.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\Operator\RfidScanner::class)->name('dashboard');
+    Route::get('/scan', \App\Livewire\Operator\RfidScanner::class)->name('scan');
 });
 
 /*

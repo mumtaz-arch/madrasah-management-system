@@ -71,6 +71,8 @@ class PresensiAnak extends Component
                             'hari' => $currentDate->locale('id')->dayName,
                             'tanggal_display' => $currentDate->format('d'),
                             'status' => $attendance->status ?? null,
+                            'waktu_masuk' => $attendance->waktu_masuk ?? null,
+                            'waktu_pulang' => $attendance->waktu_pulang ?? null,
                             'keterangan' => $attendance->keterangan ?? null,
                         ];
 

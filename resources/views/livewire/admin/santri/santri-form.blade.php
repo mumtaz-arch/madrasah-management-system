@@ -29,6 +29,14 @@
                             @error('nis') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         
+                        <!-- RFID UID -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">RFID UID (Opsional untuk Absensi)</label>
+                            <input type="text" wire:model="rfid_uid" placeholder="Tap kartu di sini..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('rfid_uid') border-red-500 @enderror">
+                            <p class="text-xs text-gray-500 mt-1">Arahkan kursor ke sini lalu tap kartu ke reader.</p>
+                            @error('rfid_uid') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+                        
                         <!-- NISN -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">NISN</label>
@@ -156,9 +164,8 @@
                 <!-- Foto -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h3 class="font-heading font-semibold text-gray-900 mb-4">Foto</h3>
-                    
                     <div class="text-center">
-                        @if($foto)
+                        @if($foto && !is_string($foto))
                             <img src="{{ $foto->temporaryUrl() }}" class="w-32 h-32 rounded-full object-cover mx-auto mb-4">
                         @elseif($isEdit && $santri->foto)
                             <img src="{{ Storage::url($santri->foto) }}" class="w-32 h-32 rounded-full object-cover mx-auto mb-4">

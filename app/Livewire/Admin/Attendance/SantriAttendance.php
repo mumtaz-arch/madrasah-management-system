@@ -40,16 +40,19 @@ class SantriAttendance extends Component
         $santris = Santri::where('kelas_id', $this->kelasId)->orderBy('nama_lengkap')->get();
         $existingAttendances = Attendance::where('kelas_id', $this->kelasId)
             ->where('tanggal', $this->tanggal)
-            ->pluck('status', 'santri_id')
-            ->toArray();
+            ->get()
+            ->keyBy('santri_id');
 
         $this->attendances = [];
         foreach ($santris as $santri) {
+            $att = $existingAttendances[$santri->id] ?? null;
             $this->attendances[$santri->id] = [
                 'santri_id' => $santri->id,
                 'nama' => $santri->nama_lengkap,
                 'nis' => $santri->nis,
-                'status' => $existingAttendances[$santri->id] ?? 'hadir',
+                'status' => $att ? $att->status : 'hadir',
+                'waktu_masuk' => $att && $att->waktu_masuk ? \Carbon\Carbon::parse($att->waktu_masuk)->format('H:i') : '',
+                'waktu_pulang' => $att && $att->waktu_pulang ? \Carbon\Carbon::parse($att->waktu_pulang)->format('H:i') : '',
             ];
         }
     }
@@ -68,7 +71,9 @@ class SantriAttendance extends Component
                 ],
                 [
                     'kelas_id' => $this->kelasId,
-                    'status' => $data['status'],
+                    'status' => $data['status'] ?? 'hadir',
+                    'waktu_masuk' => !empty($data['waktu_masuk']) ? $data['waktu_masuk'] : null,
+                    'waktu_pulang' => !empty($data['waktu_pulang']) ? $data['waktu_pulang'] : null,
                     'recorded_by' => auth()->id(),
                 ]
             );
@@ -89,12 +94,15 @@ class SantriAttendance extends Component
     private function getStats(): array
     {
         if (empty($this->attendances)) {
-            return ['hadir' => 0, 'izin' => 0, 'sakit' => 0, 'alpha' => 0];
+            return ['hadir' => 0, 'terlambat' => 0, 'izin' => 0, 'sakit' => 0, 'alpha' => 0];
         }
 
-        $stats = ['hadir' => 0, 'izin' => 0, 'sakit' => 0, 'alpha' => 0];
+        $stats = ['hadir' => 0, 'terlambat' => 0, 'izin' => 0, 'sakit' => 0, 'alpha' => 0];
         foreach ($this->attendances as $att) {
-            $stats[$att['status']]++;
+            $status = $att['status'] ?? 'hadir';
+            if (isset($stats[$status])) {
+                $stats[$status]++;
+            }
         }
         return $stats;
     }

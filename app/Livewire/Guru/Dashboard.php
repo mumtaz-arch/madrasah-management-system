@@ -5,6 +5,7 @@ namespace App\Livewire\Guru;
 use App\Models\Jadwal;
 use App\Models\Nilai;
 use App\Models\Kelas;
+use App\Models\Attendance;
 use App\Models\TeacherJournal;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
@@ -48,10 +49,13 @@ class Dashboard extends Component
             return;
         }
 
-        $hour = now()->hour;
-        if ($hour < 7 || $hour >= 15) {
+        $nowDate = now();
+        $openTime = \Carbon\Carbon::parse(\App\Models\AppSetting::getValue('journal_open_time', '07:00'));
+        $closeTime = \Carbon\Carbon::parse(\App\Models\AppSetting::getValue('journal_close_time', '16:00'));
+
+        if ($nowDate->format('H:i') < $openTime->format('H:i') || $nowDate->format('H:i') > $closeTime->format('H:i')) {
             $this->isOutsideTime = true;
-            $this->outsideTimeMessage = 'Waktu pengisian jurnal sudah lewat (07.00 - 15.00). Anda tidak dapat mengisi jurnal di luar jam tersebut.';
+            $this->outsideTimeMessage = 'Waktu pengisian jurnal sudah lewat (' . $openTime->format('H:i') . ' - ' . $closeTime->format('H:i') . '). Anda tidak dapat mengisi jurnal di luar jam tersebut.';
         } else {
             $this->isOutsideTime = false;
             $this->outsideTimeMessage = '';
@@ -68,13 +72,45 @@ class Dashboard extends Component
 
         $this->selectedJadwal = $jadwal;
         
-        // Build per-student attendance list, default all to 'H' (Hadir)
+        // Fetch today's actual attendances for this class
+        $todayAttendances = Attendance::where('kelas_id', $jadwal->kelas_id)
+            ->where('tanggal', today()->format('Y-m-d'))
+            ->get()
+            ->keyBy('santri_id');
+
+        // Fetch today's Kegiatan attendances for this class
+        $kelasSantriIds = $jadwal->kelas->santris->pluck('id');
+        $todayKegiatans = \App\Models\KegiatanAttendance::whereIn('santri_id', $kelasSantriIds)
+            ->where('tanggal', today()->format('Y-m-d'))
+            ->get()
+            ->keyBy('santri_id');
+
+        // Build per-student attendance list based on RFID scans
         $this->attendanceList = [];
         foreach ($jadwal->kelas->santris as $santri) {
+            $att = $todayAttendances->get($santri->id);
+            $keg = $todayKegiatans->get($santri->id);
+            
+            // Map status from db to journal abbreviation
+            $statusCode = 'A'; // Default Alfa / Not yet scanned
+            if ($att) {
+                $statusCode = match($att->status) {
+                    'hadir' => 'H',
+                    'terlambat' => 'T',
+                    'sakit' => 'S',
+                    'izin' => 'I',
+                    default => 'A',
+                };
+            } elseif ($keg) {
+                // If they didn't check-in academically but they checked into a Kegiatan today
+                $statusCode = 'K';
+            }
+
             $this->attendanceList[] = [
                 'id' => $santri->id,
                 'nama' => $santri->nama_lengkap,
-                'status' => 'H', // H=Hadir, S=Sakit, I=Izin, A=Alfa
+                'status' => $statusCode,
+                'waktu_masuk' => $att ? $att->waktu_masuk : null
             ];
         }
 
@@ -107,9 +143,12 @@ class Dashboard extends Component
     public function saveJournal(): void
     {
         // Server-side time guard
-        $hour = now()->hour;
-        if ($hour < 7 || $hour >= 15) {
-            $this->dispatch('error', 'Pengisian jurnal hanya dapat dilakukan pukul 07.00 - 15.00.');
+        $nowDate = now();
+        $openTime = \Carbon\Carbon::parse(\App\Models\AppSetting::getValue('journal_open_time', '07:00'));
+        $closeTime = \Carbon\Carbon::parse(\App\Models\AppSetting::getValue('journal_close_time', '16:00'));
+
+        if ($nowDate->format('H:i') < $openTime->format('H:i') || $nowDate->format('H:i') > $closeTime->format('H:i')) {
+            $this->dispatch('error', 'Pengisian jurnal hanya dapat dilakukan pukul ' . $openTime->format('H:i') . ' - ' . $closeTime->format('H:i') . '.');
             return;
         }
 
@@ -121,8 +160,8 @@ class Dashboard extends Component
 
         // Calculate counts from attendance list
         $attendanceCollection = collect($this->attendanceList);
-        $presentCount = $attendanceCollection->where('status', 'H')->count();
-        $absentCount = $attendanceCollection->whereIn('status', ['S', 'I', 'A'])->count();
+        $presentCount = $attendanceCollection->whereIn('status', ['H', 'T'])->count();
+        $absentCount = $attendanceCollection->whereIn('status', ['S', 'I', 'A', 'K'])->count();
 
         TeacherJournal::create([
             'teacher_id' => Auth::user()->guru->id,
@@ -155,6 +194,8 @@ class Dashboard extends Component
                 'jadwalHariIni' => collect(),
                 'kelasAjar' => collect(),
                 'stats' => [],
+                'kelasWali' => null,
+                'presensiKelasHariIni' => [],
             ]);
         }
 
@@ -195,11 +236,33 @@ class Dashboard extends Component
             'jurnal_hari_ini' => TeacherJournal::where('teacher_id', $guru->id)->whereDate('date', today())->count(),
         ];
 
+        // Check if Guru is a Wali Kelas
+        $kelasWali = Kelas::where('wali_kelas_id', $guru->id)->first();
+        $presensiKelasHariIni = [];
+        
+        if ($kelasWali) {
+            $today = \Carbon\Carbon::today()->format('Y-m-d');
+            $attendances = Attendance::where('kelas_id', $kelasWali->id)
+                ->where('tanggal', $today)
+                ->get();
+            
+            $presensiKelasHariIni = [
+                'hadir' => $attendances->where('status', 'hadir')->count(),
+                'izin' => $attendances->where('status', 'izin')->count(),
+                'sakit' => $attendances->where('status', 'sakit')->count(),
+                'alpha' => $attendances->where('status', 'alpha')->count(),
+                'total_santri' => $kelasWali->santris()->count(),
+            ];
+            $presensiKelasHariIni['belum_absen'] = max(0, $presensiKelasHariIni['total_santri'] - count($attendances));
+        }
+
         return view('livewire.guru.dashboard', [
             'guru' => $guru,
             'jadwalHariIni' => $jadwalHariIni,
             'kelasAjar' => $kelasAjar,
             'stats' => $stats,
+            'kelasWali' => $kelasWali,
+            'presensiKelasHariIni' => $presensiKelasHariIni,
         ]);
     }
 }

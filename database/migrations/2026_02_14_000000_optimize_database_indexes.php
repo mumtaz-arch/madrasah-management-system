@@ -64,28 +64,33 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('santris', function (Blueprint $table) {
-            $table->dropIndex(['nama_lengkap']);
-            $table->dropIndex(['status']);
+        $indexExists = function ($table, $indexName) {
+            $indexes = \Illuminate\Support\Facades\DB::select("SHOW INDEX FROM {$table} WHERE Key_name = ?", [$indexName]);
+            return count($indexes) > 0;
+        };
+
+        Schema::table('santris', function (Blueprint $table) use ($indexExists) {
+            if ($indexExists('santris', 'santris_nama_lengkap_index')) $table->dropIndex(['nama_lengkap']);
+            if ($indexExists('santris', 'santris_status_index')) $table->dropIndex(['status']);
         });
 
-        Schema::table('attendances', function (Blueprint $table) {
-            $table->dropIndex(['status']);
-            $table->dropIndex(['tanggal']);
+        Schema::table('attendances', function (Blueprint $table) use ($indexExists) {
+            if ($indexExists('attendances', 'attendances_status_index')) $table->dropIndex(['status']);
+            if ($indexExists('attendances', 'attendances_tanggal_index')) $table->dropIndex(['tanggal']);
         });
 
-        Schema::table('tagihans', function (Blueprint $table) {
-            $table->dropIndex(['status']);
-            $table->dropIndex(['jatuh_tempo']);
+        Schema::table('tagihans', function (Blueprint $table) use ($indexExists) {
+            if ($indexExists('tagihans', 'tagihans_status_index')) $table->dropIndex(['status']);
+            if ($indexExists('tagihans', 'tagihans_jatuh_tempo_index')) $table->dropIndex(['jatuh_tempo']);
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['role']);
+        Schema::table('users', function (Blueprint $table) use ($indexExists) {
+            if ($indexExists('users', 'users_role_index')) $table->dropIndex(['role']);
         });
         
         if (Schema::hasTable('exams')) {
-            Schema::table('exams', function (Blueprint $table) {
-                $table->dropIndex(['start_time']);
+            Schema::table('exams', function (Blueprint $table) use ($indexExists) {
+                if ($indexExists('exams', 'exams_mulai_index')) $table->dropIndex(['mulai']);
             });
         }
     }

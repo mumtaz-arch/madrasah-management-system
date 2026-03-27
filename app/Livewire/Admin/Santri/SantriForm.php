@@ -21,6 +21,7 @@ class SantriForm extends Component
     // Form fields
     public string $nis = '';
     public ?string $nisn = '';
+    public ?string $rfid_uid = '';
     public string $nama_lengkap = '';
     public ?string $tempat_lahir = '';
     public ?string $tanggal_lahir = '';
@@ -46,6 +47,7 @@ class SantriForm extends Component
             $this->fill($santri->toArray());
             $this->kelas_id = (string) $santri->kelas_id;
             $this->wali_id = (string) $santri->wali_id;
+            $this->rfid_uid = $santri->rfid_uid;
             $this->tanggal_lahir = $santri->tanggal_lahir?->format('Y-m-d');
             
             if ($santri->user) {
@@ -62,6 +64,7 @@ class SantriForm extends Component
         $rules = [
             'nis' => ['required', 'string', 'max:20', Rule::unique('santris', 'nis')->ignore($this->santri?->id)],
             'nisn' => ['nullable', 'string', 'max:20'],
+            'rfid_uid' => ['nullable', 'string', 'max:50', Rule::unique('santris', 'rfid_uid')->ignore($this->santri?->id)],
             'nama_lengkap' => ['required', 'string', 'max:255'],
             'tempat_lahir' => ['nullable', 'string', 'max:100'],
             'tanggal_lahir' => ['nullable', 'date'],
@@ -92,6 +95,7 @@ class SantriForm extends Component
         $data = [
             'nis' => $this->nis,
             'nisn' => $this->nisn ?: null,
+            'rfid_uid' => $this->rfid_uid ?: null,
             'nama_lengkap' => $this->nama_lengkap,
             'tempat_lahir' => $this->tempat_lahir ?: null,
             'tanggal_lahir' => $this->tanggal_lahir ?: null,
